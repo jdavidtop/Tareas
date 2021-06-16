@@ -1,0 +1,141 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+Jorge David Top Raxón
+1777389280101
+Ciencias de la Computacion
+
+Tarea 2
+
+Funciones en R
+
+Una función reune una secuencia de operaciones como un todo, almacenándola para su uso continuo, proveen:
+Un nombre que podemos invocar
+Una solucion para realizar varias operaciones individuales
+Un conjunto definido de inputs y outputs
+mayor conexion
+
+
+Estructura de una función
+
+Definimos nombredefuncion() asignándola al output de function. La lista de los nombres de los argumentos se encuentran entre paréntesis. Luego, en el cuerpo de la función los comandos que son ejecutados cuando se corre, y se encuentran entre paréntesis curvos ({}). Los comandos en el cuerpo se indentan con dos espacios. Esto hace que el código sea legible sin afectar su funcionalidad.
+
+Cuando utilizamos la función, los valores que definimos como argumentos se asignan a esas variables para que podamos usarlos dentro de la función. Dentro de la función, usamos un return statement para devolver un resultado a quien lo solicitó.
+
+Si el argumento esta en blanco se muestra un error, para prevenir eso, se pueden definir argumentos por defecto: nombredefuncion <- function (variable_de_entrada = 0)
+
+Se puede retornar mas de una variable utilizando una coleccion para el retorno de datos.  return(c(x,y)), donde x y y son variables calculadas dentro de la funcion. 
+
+nombredefuncion <- function (Variable_de_entrada=0){
+operaciones
+return(variable_Resultado)
+}
+
+https://swcarpentry.github.io/r-novice-gapminder-es/10-functions/
+
+https://soka.gitlab.io/blog/post/2019-03-15-r-funciones-intro/
+
+
+Ejemplo
+```{r}
+Celcius_to_fah <- function(temp_C=0){
+  Fahr <- (temp_C*(9/5))+32
+  return(Fahr)
+}
+```
+
+
+```{r}
+
+Celcius_to_fah()
+
+
+```
+Funciones especializadas en R
+https://rpubs.com/ydmarinb/apply
+
+La familia Apply
+
+La idea de las funciones que pertenecen a esta familia es la manipulación de vectores, matrices, listas y data frame. Permiten evitar el uso directo de ciclos por medio de funciones que operan directamente sobre cada elemento de la estructura de datos.
+
+
+
+apply()
+Esta función es aplicable sobre matrices, su estructura es apply(x, MARGIN, FUN, ...)y sus parámetros son los siguientes:
+
+x <- Es la matriz
+MARGIN <- Podemos realizar operaciones sobre filas o columnas donde 1 indica filas y 2 indica columnas.
+FUN <- Es la función que se quiere aplicar sobre los datos, esta puede ser una función de agregación una de transformación o subconjunto o funciones vectorizadas.
+
+En el ejemplo, apply (M_apply, 2, sum) retornara la suma de cada columna. 
+
+```{r}
+M_apply <- matrix(1:20, nrow = 5, ncol = 4)
+M_apply
+apply (M_apply, 2, sum)
+```
+
+
+lapply()
+
+Esta función permite trabajar con vectores, listas o data frame. Se pueden aplicar operaciones por elementos las cuales con retornadas como una lista. Su estructura está dada por lapply(x, simplify=FALSE, FUN,...).
+
+simplify=FALSE <- Le indica a R que no retorne los valores como una lista.
+
+Ejemplo 1
+Del siguiente ejemplo, lapply(x, sqrt) retornara los valores de las raices cuadradas de cada elemento del vector x. 
+
+```{r}
+x <- 1:5
+x
+lapply(x, sqrt)
+```
+
+
+Ejemplo 2
+En este ejemplo, lapply retorna la media de cada elemento de la lista z. 
+
+```{r}
+z <- list(a = 1:10, b = c(1,10,100,1000), c = seq(5,50,5))
+z
+
+lapply(z, mean)
+```
+
+
+
+
+sapply()
+
+Esta función tiene un uso similar a la función lapply() ya que puede ser usada para data frame, vectores y listas pero se diferencia ya que esta imprime por consola un vector de valores y no una lista. La estructura está dada por sapply(x, FUN, ...)
+
+Ejemplo 1 
+En este ejemplo sapply devuelve un vector con la media de la lista z. 
+```{r}
+
+sapply(z, mean)
+```
+
+Ejemplo 2:
+
+En este ejemplo, sapply devuelve en un vectores el sumario de los datos de planets_df
+```{r}
+sapply(planets_df, summary)
+```
+
+
+vapply ()
+http://adv-r.had.co.nz/Functionals.html
+Sapply y vapply son muy similares a lapply, excepto que ellos simplifican sus salidas para producir un vector atomico. Mientras sapply supone, vapplly toma un argumento adicional especificando el tipo de salida. Sapply esta bien para uso interactivo porque reduce escritura, pero si se usa dentro de funciones puede retornar errores raros si se suministra el tipo erroneo de entrada. Vapply necesita mas escritura, pero da mas errores informativos y nunca falla sin mostrar un error. 
+El siguiente ejemplo muestra estas diferencias, dado un data frame, sapply y vapply retornan los mismos resultados, cuando se les da una lista vacia, sapply retorna otra lista vacia en vez de la mas logica, vector de largo 0. 
+```{r}
+
+sapply(mtcars, is.numeric)
+vapply(mtcars, is.numeric, logical(1))
+
+sapply(list(), is.numeric)
+vapply(list(), is.numeric, logical(1))
+
+```
+
