@@ -1,0 +1,162 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+Jorge David Top Raxon
+17773898280101
+Maestria en Ingenieria para la Industria con Especialidad en Ciencias de la Computacion 
+
+TAREA 3
+
+Investigue cómo leer un archivo CSV desde R.
+  Con la función read.csv:
+    Puedes ver la sintaxis básica de las funciones con los argumentos más comunes en el siguiente bloque de código. 
+
+Sintaxis básica
+  Por defecto coma (,) como separador y punto (.) como separador decimal
+    read.csv(file,                 # Nombre del archivo o ruta completa del archivo
+         header = TRUE,        # Leer el encabezado (TRUE) o no (FALSE)
+         sep = ",",            # Separador de los valores
+         quote = "\"",         # Caracter de citaciones
+         dec = ".",            # Punto decimal
+         fill = TRUE,          # Rellenar celdas vacías (TRUE) o no (FALSE)
+         comment.char = "",    # Carácter de los comentarios o cadenas vacías
+         encoding = "unknown", # Codificación del archivo
+         ...)                  # Argumentos adicionales
+
+  Por defecto punto y coma (;) como separador y coma (,) como separador decimal
+    read.csv2(file, header = TRUE, sep = ";", quote = "\"", dec = ",",
+          fill = TRUE, comment.char = "", encoding = "unknown", ...)
+
+Investigue acerca de la función select() de la paquetería de dplyr.
+  Seleccionar columnas por sus nombres y tipos
+  Seleccionar y opcinalmente renombrar variables en un data frame, utilizando un conciso mini lenguaje que hace facil referise a variables basadas en sus nombre. 
+
+  Carectisticas de Selection
+    Las selecciones de Tidyverse implementan un dialecto de R donde los operadores hacen facil seleccionar variables. 
+    : Para seleccionar un rango de variables consecutivas
+    ! para tomar el complemnto de un set de variables
+    / y | para seleccionar la interseccion de la union de dos set de variables. 
+    c() for combining selections
+    
+    Adicionalmente, se pueden usar asistentes de selecccion como:
+    everything(): Coincide todas las variables
+    last_col(): Selecciona la ultima variable, posiblemente con un offset.
+
+
+    starts_with(): Comienza con un prefijo
+    ends_with(): Finaliza con un sufijo
+    contains(): Contiene una cadena literal
+    matches(): Coincide con una expresion regular
+    num_range(): Coincide con un rango numerico
+
+  Estos asistencias seleccionan una variable de un vector 
+
+    all_of(): Coincide los nombres de las variables un vector de caracteres, todos los nombres deben estar presentes, de otra manera, un error de fuera de cadena es     mostrado. 
+    any_of(): Lo mismo que all_of(), excepto que no hau un error si un nombre no existe.
+
+  Estos asistentes seleccionan variables de una función:
+
+where(): Aplica una funcion a todas las variables y selecciona aquellas en las que la función devuelva un TRUE.
+
+
+Lea el dataset compartido (primary_results.csv) y asignelo a la variable dataset_results.
+Aplique los conocimientos de filter, arrange, mutate y también select para desarrollar los
+siguientes ejercicios:
+
+```{r}
+
+dataset_results <- read.csv("primary_results.csv", header = TRUE, sep = ",", quote = "\"", dec = ".", fill = TRUE, comment.char = "", encoding = "unknown")
+
+dataset_results
+library(dplyr)
+
+```
+1. Filtrar todos los votos del estado de Florida.
+
+```{r}
+
+dataset_results %>%
+  filter (state == "Florida")
+```
+
+
+Utilice operadores lógicos (& and |), según corresponda:
+2.1. Filtrar votos para los candidatos Hillary Clinton o Donald Trump
+2.2. Filtrar votos para el partido Demócrata y el condado Shelby
+2.3. Filtrar votos para el estado de Alabama y que la cantidad de votos sea mayor a
+15000.
+```{r}
+dataset_results %>%
+  filter(candidate == "Hillary Clinton" | candidate == "Doanald Trump")%>%
+  filter(party == "Democrat" & county == "Shelby")%>%
+  filter(state == "Alabama" & votes > 15000)
+```
+
+Utilice operadores lógicos (& and |), según corresponda:
+2.1. Filtrar votos para los candidatos Hillary Clinton o Donald Trump
+
+```{r}
+dataset_results %>%
+  filter(candidate == "Hillary Clinton" | candidate == "Donald Trump")
+
+```
+2.2. Filtrar votos para el partido Demócrata y el condado Shelby
+```{r}
+dataset_results %>%
+    filter(party=="Democrat" & county == "Shelby")
+```
+
+
+2.3. Filtrar votos para el estado de Alabama y que la cantidad de votos sea mayor a
+15000.
+
+```{r}
+
+dataset_results %>%
+  filter (state =="Alabama" & votes > 15000)
+
+```
+
+Utilice la función select y arrange para el siguiente filtrado:
+3.1. Filtrar votos para el estado de Texas y el condado Denton, seleccionando
+únicamente las columnas party, candidate, votes, luego ordene de forma
+descendente por la columna votes.
+
+
+```{r}
+dataset_results %>%
+  filter(state =="Texas" & county == "Denton")%>%
+  select(party, candidate, votes)%>%
+  arrange(desc(votes))
+
+
+
+
+```
+
+Utilice el verbo mutate y arrange para el siguiente filtrado:
+4.1. Filtrar por el partido Republicano, que el candidato sea Ted Cruz en el estado de
+Alaska, luego agregue una columna que se llame vote_count que sea la división de
+votes por fraction_votes (votes/fraction_votes), finalmente ordene de forma
+descendente por vote_count.
+
+```{r}
+dataset_results%>%
+  filter(candidate == "Ted Cruz" & state == "Alaska")%>%
+  mutate(vote_count = votes/fraction_votes)%>%
+  arrange(desc(vote_count))
+```
+
+Bibliografia:
+Leer CSV en R o Studio, 
+https://r-coder.com/leer-csv-r/
+
+
+Subset columns using their names and types
+https://dplyr.tidyverse.org/reference/select.html
+
+Curso de R | Manipulación de data frames con ‘dplyr’
+https://mauricioanderson.com/curso-r-dplyr/
+Dic, 19, 2016
+
