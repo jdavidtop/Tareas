@@ -39,10 +39,11 @@ question_tags <- read_csv("question_tags.csv")
 ```{r}
 question_tags
 questions
+tags
 
 questions_with_tags<-questions%>%
   left_join(question_tags, by = c("id" = "question_id"))%>%
-  left_join(tags, by = c("id"= "id"))%>%
+  left_join(tags, by = c("tag_id"= "id"))%>%
   replace_na(list(tag_name = "only-r"))
 
 questions_with_tags
